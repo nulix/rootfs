@@ -1,0 +1,3 @@
+RUN mkdir /var/apps
+COPY docker-compose.yml /var/apps
+

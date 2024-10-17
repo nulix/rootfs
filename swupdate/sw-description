@@ -1,0 +1,54 @@
+software =
+{
+	version = "0.1.0";
+
+	rpi = {
+		hardware-compatibility: [ "1.0"];
+		stable : {
+			A : {
+				images: (
+					{
+						filename = "nulix-rootfs.ext4.gz";
+						type = "raw";
+						compressed = "zlib";
+						device = "/dev/mmcblk0p5";
+						installed-directly = true;
+						sha256 = "@@ROOTFS_SHA256@@";
+					}
+				);
+				bootenv: (
+					{
+						name = "rpipart";
+						value = "5";
+					},
+					{
+						name = "ustate";
+						value = "1";
+					}
+				);
+			};
+			B : {
+				images: (
+					{
+						filename = "nulix-rootfs.ext4.gz";
+						type = "raw";
+						compressed = "zlib";
+						device = "/dev/mmcblk0p6";
+						installed-directly = true;
+						sha256 = "@@ROOTFS_SHA256@@";
+					}
+				);
+				bootenv: (
+					{
+						name = "rpipart";
+						value = "6";
+					},
+					{
+						name = "ustate";
+						value = "1";
+					}
+				);
+			};
+		};
+	}
+}

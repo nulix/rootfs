@@ -1,0 +1,8 @@
+name: apps
+services:
+  webserver:
+    ports:
+      - 8080:80
+    restart: unless-stopped
+    container_name: webserver
+    image: ghcr.io/nulix/webserver:1.0

@@ -1,0 +1,50 @@
+# syntax = devthefuture/dockerfile-x
+
+###
+### STAGE 1 - BUILD
+###
+ARG MACHINE="rpi"
+
+FROM ./Dockerfile.rauc AS build
+INCLUDE ./Dockerfile.machine
+
+COPY recovery/recover.sh.in /recover.sh
+RUN chmod +x /recover.sh
+
+# TODO: why this doesn't work??
+# RUN find . | sort | cpio -o -H newc | gzip -9 > initramfs.img.gz
+
+RUN apk add --no-cache dracut
+RUN dracut --no-kernel --hostonly --no-hostonly-cmdline --gzip \
+    --install "/sbin/mke2fs" \
+    --install "/sbin/mkfs.ext*" \
+    --include /recover.sh /lib/dracut/hooks/pre-mount/01-recover.sh \
+    --install "/lib/modules/*/kernel/drivers/md/dm-mod.ko.xz" \
+    --install "/lib/modules/*/kernel/drivers/md/dm-bufio.ko.xz" \
+    --install "/lib/modules/*/kernel/drivers/md/dm-verity.ko.xz" \
+    --install "/lib/modules/*/kernel/drivers/block/nbd.ko.xz" \
+    --install "/lib/modules/*/kernel/fs/squashfs/squashfs.ko.xz" \
+    --install "/usr/bin/fw_*" \
+    --include /etc/fw_env.config /etc/fw_env.config \
+    --install "/usr/bin/dbus*" \
+    --include /etc/dbus-1 /etc/dbus-1 \
+    --include /usr/share/dbus-1 /usr/share/dbus-1 \
+    --include /usr/share/xml/dbus-1 /usr/share/xml/dbus-1 \
+    --install "/usr/bin/rauc" \
+    --include /etc/rauc /etc/rauc \
+    --install "/usr/bin/rauc-hawkbit-updater" \
+    --include /etc/rauc-hawkbit-updater /etc/rauc-hawkbit-updater \
+    --include /usr/share/dbus-1/system-services /usr/share/dbus-1/system-services \
+    --include /usr/share/dbus-1/system.d /usr/share/dbus-1/system.d \
+    initramfs-recovery.gz
+
+RUN mkimage -A arm64 -O linux -T ramdisk -C gzip -n "Recovery initramfs" -d initramfs-recovery.gz initramfs-recovery
+
+###
+### STAGE 2 - EXPORT BUILD ARTIFACTS
+###
+FROM scratch
+
+# copy build artifacts
+COPY --from=build /initramfs-recovery /
+

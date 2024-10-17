@@ -1,0 +1,43 @@
+#!/sbin/openrc-run
+
+# Copyright (c) NULIX
+# This code is licensed under BSD-2-Clause
+
+description="Mount partitions"
+
+depend() {
+	before rauc @@NULIX_VIRT_BACKEND@@
+	keyword -prefix -lxc -docker
+}
+
+start() {
+	ROOTFS_KCMD=$(cat /proc/cmdline | grep -o 'root=[^ ]*' | head -n 1)
+	ROOTFS_KCMD=$(echo $ROOTFS_KCMD | sed "s/root=//")
+	ROOTFS_DEV=$(echo $ROOTFS_KCMD | rev | cut -c2- | rev)
+	ROOTFS_P=$(echo $ROOTFS_KCMD | rev | cut -c1)
+
+	# boot partition
+	ebegin "Mounting boot"
+	BOOTFS_P=$((ROOTFS_P-1))
+	BOOTFS=${ROOTFS_DEV}${BOOTFS_P}
+	mount -t vfat ${BOOTFS} /boot
+	eend $?
+
+	# data partition
+	ebegin "Mounting data"
+	DATAFS=$(ls ${ROOTFS_DEV}* | tail -n1)
+	mount -t ext4 ${DATAFS} /data
+	eend $?
+
+	# bind mounts
+	ebegin "Mounting bind mounts"
+	mkdir -p /data/@@NULIX_VIRT_BACKEND@@
+	mount --bind /data/@@NULIX_VIRT_BACKEND@@ /var/lib/@@NULIX_VIRT_BACKEND@@
+	eend $?
+}
+
+stop() {
+	mountpoint -q "/boot" && umount /boot
+	mountpoint -q "/var/lib/@@NULIX_VIRT_BACKEND@@" && umount /var/lib/@@NULIX_VIRT_BACKEND@@
+	mountpoint -q "/data" && umount /data
+}

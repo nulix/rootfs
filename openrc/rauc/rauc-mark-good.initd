@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+# Copyright (c) NULIX
+# This code is licensed under BSD-2-Clause
+
+name="rauc mark-good service"
+description="RAUC Good-marking Service"
+
+command="/usr/bin/rauc"
+command_args="${COMMAND_ARGS}"
+
+depend() {
+	need rauc
+}

@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+
+# Copyright (c) NULIX
+# This code is licensed under BSD-2-Clause
+
+name="rauc-hawkbit-updater service"
+description="RAUC hawkBit Updater Service"
+
+command="/usr/bin/rauc-hawkbit-updater"
+command_args="${COMMAND_ARGS}"
+command_background="yes"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need rauc
+}

@@ -1,0 +1,51 @@
+###
+### STAGE 1 - BUILD
+###
+FROM ./Dockerfile.alpine AS build
+
+# install build deps
+RUN apk add --no-cache git build-base cmake bsd-compat-headers yaml-dev zlib-dev \
+    json-c-dev linux-headers openssl-dev libconfig-dev curl-dev libarchive-dev zeromq-dev meson
+
+# libubootenv
+RUN git clone https://github.com/sbabic/libubootenv.git
+RUN cd libubootenv && \
+    cmake . && \
+    make -j$(nproc) && \
+    make install
+
+# zchunk
+INCLUDE ./Dockerfile.zchunk
+
+# swupdate
+RUN git clone https://github.com/sbabic/swupdate.git
+COPY swupdate/defconfig.in swupdate/defconfig
+RUN cd swupdate && \
+    make defconfig && \
+    make -j$(nproc)
+
+###
+### STAGE 2 - RUNTIME
+###
+FROM ./Dockerfile.alpine
+
+# install runtime deps
+RUN apk add --no-cache libcurl json-c libconfig libarchive libzmq yaml
+
+# install libubootenv
+COPY --from=build /usr/local/lib/libubootenv* /usr/lib
+COPY --from=build /usr/local/bin/fw_printenv /usr/bin
+RUN cd /usr/bin && ln -sf fw_printenv fw_setenv
+
+# install zchunk
+COPY --from=build /usr/local/lib/libzck.so.*.* /usr/lib
+RUN cd /usr/lib && ln -sf libzck.so.*.* libzck.so.1
+RUN cd /usr/lib && ln -sf libzck.so.*.* libzck.so
+
+# install swupdate
+COPY --from=build /swupdate/swupdate /usr/bin
+COPY --from=build /swupdate/libswupdate.so.0.1 /usr/lib
+RUN cd /usr/lib && ln -sf libswupdate.so.* libswupdate.so
+COPY swupdate/swupdate.cfg.in /etc/swupdate/swupdate.cfg
+COPY swupdate/swupdate-public.pem /etc/swupdate/
+

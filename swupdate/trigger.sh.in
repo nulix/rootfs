@@ -1,0 +1,30 @@
+#!/bin/sh
+
+do_preinst()
+{
+    # TODO: check if there is enough space on /data
+    exit 0
+}
+
+do_postinst()
+{
+    echo "rebooting in recovery mode"
+    reboot
+}
+
+echo $0 $1 > /dev/ttyO0
+
+case "$1" in
+preinst)
+    echo "call do_preinst"
+    do_preinst
+    ;;
+postinst)
+    echo "call do_postinst"
+    do_postinst
+    ;;
+*)
+    echo "default"
+    exit 1
+    ;;
+esac

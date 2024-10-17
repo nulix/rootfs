@@ -1,0 +1,14 @@
+[update]
+compatible=rpi
+version=v20200703
+description=Apps Update Bundle
+build=20200703
+
+[bundle]
+format=verity
+
+[handler]
+filename=apps-handler.sh
+
+[image.apps/webserver-app]
+filename=webserver-app.tar.gz

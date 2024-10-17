@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+# import new version of image
+docker load -i $(dirname $0)/webserver-app.tar.gz
+
+# restart container
+docker rm -f webserver || true
+docker run -d -p 8080:80 --restart unless-stopped --name webserver webserver:1.0.0
+
+exit 0

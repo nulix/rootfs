@@ -1,0 +1,6 @@
+ARG NULIX_VIRT_BACKEND
+
+RUN if [[ "$NULIX_VIRT_BACKEND" == "lxc" ]]; then \
+      apk add --no-cache lxc lxc-openrc; \
+    fi
+

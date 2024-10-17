@@ -1,0 +1,27 @@
+FROM alpine:3.20.3
+
+# enable serial login
+RUN sed -i "s/^#ttyS0/ttyS0/" /etc/inittab
+
+# set root password
+RUN passwd -d root
+
+# cleanups
+RUN printf "" > /etc/motd
+RUN printf "" > /etc/fstab
+COPY files/issue.in /etc/issue
+COPY files/setup_env.sh /etc/profile.d/
+
+# additional packages
+RUN apk add --no-cache \
+    busybox-mdev-openrc \
+    chrony \
+    dosfstools \
+    e2fsprogs \
+    htop \
+    iproute2 \
+    openssh
+
+# OTA update test
+# RUN apk add --no-cache nano
+

@@ -1,0 +1,34 @@
+globals :
+{
+	bootloader		= "uboot";
+	verbose			= true;
+	loglevel		= 5;
+	syslog			= true;
+	public-key-file = "/etc/swupdate/swupdate-public.pem";
+};
+
+download :
+{
+	retries			= 3;
+	timeout			= 1800;
+};
+
+identify : (
+	{ name = "rpi"; value = "3"; }
+);
+
+suricatta :
+{
+	enable			= true;
+	tenant			= "DEFAULT";
+	id			= "rpi3";
+	url 			= "http://ota.nulix.hr";
+	polldelay		= 60;
+	nocheckcert		= true;
+	retry			= 4;
+	retrywait		= 200;
+	loglevel		= 10;
+	userid			= 0;
+	groupid			= 0;
+	targettoken		= "b779b1b32cfe06bae37ebfd5489004fc";
+};

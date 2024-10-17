@@ -1,0 +1,15 @@
+[update]
+compatible=rpi
+version=v20200703
+description=RAUC Update Bundle
+build=20200703
+
+[bundle]
+format=verity
+
+[image.rootfs]
+filename=nulix-rootfs.ext4
+adaptive=block-hash-index
+
+[image.linux]
+filename=kernel-artifacts.tar.gz

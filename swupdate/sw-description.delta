@@ -1,0 +1,35 @@
+software =
+{
+	version = "0.1.0";
+
+	rpi = {
+		hardware-compatibility: [ "1.0"];
+		stable : {
+			A : {
+				images: (
+					{
+						filename = "output.zck.header";
+						sha256 = "@@ZHEADER_SHA256@@";
+						type = "delta";
+						device = "/dev/mmcblk0p2";
+						properties: {
+							url = "https://bashupload.com/jMzmQ/output.zck";
+							chain = "raw";
+							source = "/dev/mmcblk0p2";
+						};
+					}
+				);
+				bootenv: (
+					{
+						name = "rpipart";
+						value = "2";
+					},
+					{
+						name = "ustate";
+						value = "1";
+					}
+				);
+			};
+		};
+	}
+}

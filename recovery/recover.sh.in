@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+
+# mount dependencies
+mkdir -p /boot /mnt/boot /recovery
+mount /dev/mmcblk0p1 /mnt/boot
+mount /dev/mmcblk0p3 /recovery
+
+# loopback device
+#ip l set up dev lo
+
+# start dbus daemon
+mkdir /var/run/dbus
+addgroup -S messagebus
+adduser -S -D -H -h /dev/null -s /sbin/nologin -G messagebus -g messagebus messagebus
+dbus-daemon --system --nofork --nopidfile --syslog-only &
+
+# start rauc service
+cp /mnt/boot/uboot.env /boot
+umount /mnt/boot
+insmod /lib/modules/*/kernel/drivers/md/dm-mod.ko.xz
+insmod /lib/modules/*/kernel/drivers/md/dm-bufio.ko.xz
+insmod /lib/modules/*/kernel/drivers/md/dm-verity.ko.xz
+insmod /lib/modules/*/kernel/drivers/block/nbd.ko.xz
+insmod /lib/modules/*/kernel/fs/squashfs/squashfs.ko.xz
+rauc service &
+sleep 2
+
+# start networking
+#ip l set up dev eth0
+#dhcpc
+
+# start recovery
+#rauc install app.nulix.hr/
+rauc install /recovery/ota-update-os-rpi.raucb
+
+# reboot to real rootfs
+umount /recovery
+reboot -f
