@@ -10,6 +10,7 @@ COPY machine/$MACHINE/hostname /etc/machine
 # custom services
 COPY openrc/apps/apps.initd /etc/init.d/apps
 COPY openrc/tmpfiles/tmpfiles.initd /etc/init.d/tmpfiles
+COPY openrc/ostree/touch-ostree.initd /etc/init.d/touch-ostree
 # COPY openrc/mountfs/mountfs.initd /etc/init.d/mountfs
 # RUN sed -i "s/@@NULIX_VIRT_BACKEND@@/${NULIX_VIRT_BACKEND}/g" /etc/init.d/mountfs
 #COPY openrc/rauc/rauc.initd /etc/init.d/rauc
@@ -39,6 +40,7 @@ RUN rc-update add networking boot
 RUN rc-update add sysctl boot
 #RUN rc-update add rauc-hawkbit-updater default
 #RUN rc-update add rauc-mark-good default
+RUN rc-update add touch-ostree default
 RUN rc-update add killprocs shutdown
 RUN rc-update add mount-ro shutdown
 
