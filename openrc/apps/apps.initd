@@ -1,8 +1,9 @@
 #!/sbin/openrc-run
 
-# Copyright (c) NULIX
+# Copyright (c) NULIX 2024
 # This code is licensed under BSD-2-Clause
 
+name="Custom apps service"
 description="Start custom isolated apps"
 
 depend() {
@@ -10,20 +11,50 @@ depend() {
 	keyword -prefix -lxc -docker
 }
 
-start() {
-	ebegin "Starting apps"
-	cd /var/apps
+update_apps() {
+	ebegin "Updating apps"
+
 	docker compose pull
 	docker compose up -d
 	docker image prune -af
-	COMPOSE_FILE_SHA=$(sha256sum docker-compose.yml | cut -d " " -f 1)
+
+	# update cached hash
 	echo ${COMPOSE_FILE_SHA} > /var/cache/apps.sha
+
 	eend $?
+}
+
+start_apps() {
+	ebegin "Apps are up-to-date, starting"
+
+	docker compose up -d
+
+	eend $?
+}
+
+start() {
+	cd /var/apps
+	COMPOSE_FILE_SHA=$(sha256sum docker-compose.yml | cut -d " " -f 1)
+
+	# update apps or just start them?
+	if [ -f /var/cache/apps.sha ]; then
+		CACHED_COMPOSE_FILE_SHA=$(cat /var/cache/apps.sha)
+
+		if [ $COMPOSE_FILE_SHA = $CACHED_COMPOSE_FILE_SHA ]; then
+			start_apps
+		else
+			update_apps
+		fi
+	else
+		update_apps
+	fi
 }
 
 stop() {
 	ebegin "Stopping apps"
+
 	cd /var/apps
 	docker compose stop
+
 	eend $?
 }
