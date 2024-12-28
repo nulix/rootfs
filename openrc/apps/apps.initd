@@ -33,7 +33,7 @@ start_apps() {
 }
 
 start() {
-	cd /var/apps
+	cd /usr/apps
 	COMPOSE_FILE_SHA=$(sha256sum docker-compose.yml | cut -d " " -f 1)
 
 	# update apps or just start them?
@@ -53,7 +53,7 @@ start() {
 stop() {
 	ebegin "Stopping apps"
 
-	cd /var/apps
+	cd /usr/apps
 	docker compose stop
 
 	eend $?
