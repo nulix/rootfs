@@ -42,11 +42,6 @@ RUN if [ -d var/lib/$NULIX_VIRT_BACKEND ]; then \
       mv var/lib/$NULIX_VIRT_BACKEND var-lib-$NULIX_VIRT_BACKEND; \
     fi
 
-# preserve var/apps
-RUN if [ -d var/apps ]; then \
-      mv var/apps var-apps; \
-    fi
-
 # preserve var/local
 RUN if [ -d var/local ]; then \
       mv var/local var-local; \
@@ -61,11 +56,6 @@ RUN rm -rf var/lib && \
 # get back var/local
 RUN if [ -d var-local ]; then \
       mv var-local var/local; \
-    fi
-
-# get back var/apps
-RUN if [ -d var-apps ]; then \
-      mv var-apps var/apps; \
     fi
 
 # get back var/lib/$NULIX_VIRT_BACKEND

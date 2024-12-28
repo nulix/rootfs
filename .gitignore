@@ -42,7 +42,7 @@ Thumbs.db
 
 # Directories #
 ###############
-apps
+apps/
 
 # OSTree files #
 ################

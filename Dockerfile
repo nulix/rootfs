@@ -10,7 +10,7 @@ INCLUDE+ Dockerfile.lxc
 INCLUDE+ Dockerfile.docker
 INCLUDE+ Dockerfile.podman
 INCLUDE+ Dockerfile.openrc
-INCLUDE+ Dockerfile.apps
 INCLUDE+ Dockerfile.ostree-initramfs
 INCLUDE+ Dockerfile.ostree
+INCLUDE+ Dockerfile.apps
 
