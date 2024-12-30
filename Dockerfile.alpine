@@ -9,6 +9,8 @@ RUN passwd -d root
 # cleanups
 RUN printf "" > /etc/motd
 RUN printf "" > /etc/fstab
+RUN sed -i "s/^#RESOLV_CONF=\"\/tmp/RESOLV_CONF=\"\/run/" \
+      /etc/udhcpc/udhcpc.conf
 COPY files/issue.in /etc/issue
 COPY files/setup_env.sh /etc/profile.d/
 
