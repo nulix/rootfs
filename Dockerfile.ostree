@@ -75,6 +75,12 @@ RUN mkdir sysroot && \
 # 1.915 mv: can't remove '/etc/resolv.conf': Device or resource busy
 # 1.915 mv: can't remove '/etc/hosts': Device or resource busy
 
+# make this symlink otherwise '/etc/resolv.conf' will be reported
+# as modified when running `ostree admin config-diff` because
+# it will eventually be updated in the runtime
+RUN cd usr/etc && \
+    ln -sf /run/resolv.conf resolv.conf
+
 # preserve OSTREE_BRANCHNAME for future information
 RUN mkdir -p usr/share/sota/ && \
     echo -n "${OSTREE_BRANCHNAME}" > usr/share/sota/branchname
