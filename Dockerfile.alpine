@@ -1,4 +1,4 @@
-FROM alpine:3.20.3
+FROM alpine:3.21.0
 
 # enable serial login
 RUN sed -i "s/^#ttyS0/ttyS0/" /etc/inittab
