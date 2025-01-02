@@ -1,7 +1,29 @@
 ARG MACHINE
 ARG NULIX_VIRT_BACKEND
 
-RUN apk add --no-cache openrc
+RUN apk add --no-cache openrc openrc-init agetty agetty-openrc
+
+# set openrc-init as the init system
+RUN cd /sbin && \
+    ln -sf openrc-init init
+
+# openrc-init does not use /etc/inittab
+RUN rm /etc/inittab
+
+# enable serial console
+RUN cd /etc/conf.d && \
+    cp agetty agetty.ttyS0 && \
+    sed -i "s/^#baud=\"\"/baud=\"115200\"/" agetty.ttyS0 && \
+    cd /etc/init.d && \
+    ln -s agetty agetty.ttyS0
+
+# install openrc-init reboot and poweroff scripts
+COPY openrc/openrc-init/poweroff.in /sbin/
+COPY openrc/openrc-init/reboot.in /sbin/
+RUN mv /sbin/poweroff.in /sbin/poweroff && \
+    mv /sbin/reboot.in /sbin/reboot && \
+    chmod +x /sbin/poweroff && \
+    chmod +x /sbin/reboot
 
 # workaround hostname issue
 RUN sed -i "s|/etc/hostname|/etc/machine|g" /etc/init.d/hostname
@@ -40,6 +62,7 @@ RUN rc-update add networking boot
 RUN rc-update add sysctl boot
 #RUN rc-update add rauc-hawkbit-updater default
 #RUN rc-update add rauc-mark-good default
+RUN rc-update add agetty.ttyS0 default
 RUN rc-update add touch-ostree default
 RUN rc-update add killprocs shutdown
 RUN rc-update add mount-ro shutdown
