@@ -3,7 +3,7 @@
 ###
 # https://github.com/uptane/meta-updater/blob/master/classes/image_types_ostree.bbclass
 
-ARG OSTREE_BRANCHNAME="main"
+ARG OSTREE_BRANCHNAME="1/stable/rpi3"
 
 RUN apk add --no-cache ostree patchelf
 

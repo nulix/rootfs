@@ -1,9 +1,4 @@
 ###
-### STAGE 1 - BUILD
-###
-FROM alpine AS build
-
-###
 ### INSPIRED WITH:
 ###
 # https://github.com/uptane/meta-updater/blob/master/classes/sota.bbclass
@@ -14,8 +9,13 @@ FROM alpine AS build
 ###
 # docker build -f Dockerfile.ostree_repo . -o .
 
+###
+### STAGE 1 - build
+###
+FROM alpine AS build
+
 ARG OSTREE_REPO="ostree_repo"
-ARG OSTREE_BRANCHNAME="main"
+ARG OSTREE_BRANCHNAME="1/stable/rpi3"
 
 ARG OSTREE_ROOTFS="nulix-rootfs"
 ARG OSTREE_COMMIT_SUBJECT="NULIX OS"
@@ -36,11 +36,15 @@ RUN mkdir ${OSTREE_ROOTFS} && \
 RUN rm -rf ${OSTREE_ROOTFS}/etc
 
 # reuse existing repo if possible
-COPY ${OSTREE_REPO}* /
+COPY ${OSTREE_REPO}* /${OSTREE_REPO}
 
 # init empty repo if needed
 RUN if ! ostree --repo=${OSTREE_REPO} refs 2>&1 > /dev/null; then \
+      echo "creating new ostree repo..."; \
       ostree --repo=${OSTREE_REPO} init --mode=archive-z2; \
+    else \
+      echo "reusing existing ostree repo with the following branches:"; \
+      ostree --repo=${OSTREE_REPO} refs; \
     fi
 
 # commit the result
@@ -58,8 +62,11 @@ RUN if [ "${OSTREE_UPDATE_SUMMARY}" = "1" ]; then \
         ostree --repo=${OSTREE_REPO} summary -u; \
     fi
 
+# compress ostree repo
+RUN tar czf ${OSTREE_REPO}.tar.gz ${OSTREE_REPO}
+
 ###
-### STAGE 2 - EXPORT BUILD ARTIFACTS
+### STAGE 2 - export build artifacts
 ###
 FROM scratch
 
@@ -67,5 +74,6 @@ ARG OSTREE_REPO="ostree_repo"
 
 # copy build artifacts
 COPY --from=build ${OSTREE_REPO} ${OSTREE_REPO}
+COPY --from=build ${OSTREE_REPO}.tar.gz ${OSTREE_REPO}.tar.gz
 COPY --from=build ostree_manifest ostree_manifest
 
