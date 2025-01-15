@@ -10,4 +10,4 @@ tmpfs	/tmp	tmpfs	nosuid,nodev	0	0
 # /dev/mmcblk0p3	/mnt/data	ext4	noatime,sync	0 2
 #
 # # bind mounts
-# /mnt/data/@@NULIX_VIRT_BACKEND@@ /var/lib/@@NULIX_VIRT_BACKEND@@ none bind 0 0
+# /mnt/data/@@VIRT_BACKEND@@ /var/lib/@@VIRT_BACKEND@@ none bind 0 0

@@ -1,5 +1,8 @@
 ARG MACHINE
-ARG NULIX_VIRT_BACKEND
+ARG HOSTNAME
+ARG VIRT_BACKEND
+ARG SERIAL_PORT
+ARG SERIAL_BAUD
 
 RUN apk add --no-cache openrc openrc-init agetty agetty-openrc
 
@@ -12,10 +15,10 @@ RUN rm /etc/inittab
 
 # enable serial console
 RUN cd /etc/conf.d && \
-    cp agetty agetty.ttyS0 && \
-    sed -i "s/^#baud=\"\"/baud=\"115200\"/" agetty.ttyS0 && \
+    cp agetty agetty.$SERIAL_PORT && \
+    sed -i "s/^#baud=\"\"/baud=\"$SERIAL_BAUD\"/" agetty.$SERIAL_PORT && \
     cd /etc/init.d && \
-    ln -s agetty agetty.ttyS0
+    ln -s agetty agetty.$SERIAL_PORT
 
 # install openrc-init reboot and poweroff scripts
 COPY openrc/openrc-init/poweroff.in /sbin/
@@ -27,7 +30,7 @@ RUN mv /sbin/poweroff.in /sbin/poweroff && \
 
 # workaround hostname issue
 RUN sed -i "s|/etc/hostname|/etc/machine|g" /etc/init.d/hostname
-COPY machine/$MACHINE/hostname /etc/machine
+RUN echo -n "$HOSTNAME" > /etc/machine
 
 # custom services
 COPY openrc/apps/apps.initd /etc/init.d/apps
@@ -50,7 +53,7 @@ RUN rc-update add tmpfiles sysinit
 RUN rc-update add apps boot
 RUN rc-update add chronyd boot
 #RUN rc-update add dbus boot
-RUN rc-update add $NULIX_VIRT_BACKEND boot
+RUN rc-update add $VIRT_BACKEND boot
 RUN rc-update add hostname boot
 RUN if [[ "$MACHINE_HAS_RTC" == "true" ]]; then \
       rc-update add hwclock boot; \
@@ -62,7 +65,7 @@ RUN rc-update add networking boot
 RUN rc-update add sysctl boot
 #RUN rc-update add rauc-hawkbit-updater default
 #RUN rc-update add rauc-mark-good default
-RUN rc-update add agetty.ttyS0 default
+RUN rc-update add agetty.$SERIAL_PORT default
 RUN rc-update add touch-ostree default
 RUN rc-update add killprocs shutdown
 RUN rc-update add mount-ro shutdown

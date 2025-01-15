@@ -14,14 +14,19 @@
 ###
 FROM alpine AS build
 
-ARG OSTREE_REPO="ostree_repo"
-ARG OSTREE_BRANCHNAME="1/stable/rpi3"
+ARG MACHINE
+ARG DISTRO_VERSION_MAJOR
+ARG DISTRO_VERSION_MINOR
+ARG DISTRO_VERSION_PATCH
+ARG OSTREE_REPO
+ARG OSTREE_MANIFEST
+ARG OSTREE_BRANCHNAME="$DISTRO_VERSION_MAJOR/stable/$MACHINE"
 
-ARG OSTREE_ROOTFS="nulix-rootfs"
+ARG OSTREE_ROOTFS
+ARG OSTREE_UPDATE_SUMMARY
 ARG OSTREE_COMMIT_SUBJECT="NULIX OS"
-ARG OSTREE_COMMIT_VERSION="1.0.0"
+ARG OSTREE_COMMIT_VERSION="$DISTRO_VERSION_MAJOR.$DISTRO_VERSION_MINOR.$DISTRO_VERSION_PATCH"
 ARG OSTREE_COMMIT_BODY="NULIX OS ${OSTREE_COMMIT_VERSION}"
-ARG OSTREE_UPDATE_SUMMARY="1"
 
 RUN apk add --no-cache ostree tar
 
@@ -56,7 +61,7 @@ RUN ostree_target_hash=$(ostree --repo=${OSTREE_REPO} commit \
            --body="${OSTREE_COMMIT_BODY}" \
            --add-metadata-string=version="${OSTREE_COMMIT_VERSION}" \
            ${EXTRA_OSTREE_COMMIT}) && \
-    echo $ostree_target_hash > ostree_manifest
+    echo $ostree_target_hash > ${OSTREE_MANIFEST}
 
 RUN if [ "${OSTREE_UPDATE_SUMMARY}" = "1" ]; then \
         ostree --repo=${OSTREE_REPO} summary -u; \
@@ -70,10 +75,11 @@ RUN tar czf ${OSTREE_REPO}.tar.gz ${OSTREE_REPO}
 ###
 FROM scratch
 
-ARG OSTREE_REPO="ostree_repo"
+ARG OSTREE_REPO
+ARG OSTREE_MANIFEST
 
 # copy build artifacts
 COPY --from=build ${OSTREE_REPO} ${OSTREE_REPO}
 COPY --from=build ${OSTREE_REPO}.tar.gz ${OSTREE_REPO}.tar.gz
-COPY --from=build ostree_manifest ostree_manifest
+COPY --from=build ${OSTREE_MANIFEST} ${OSTREE_MANIFEST}
 
