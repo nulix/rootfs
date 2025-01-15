@@ -1,5 +1,9 @@
 FROM alpine:3.21.0
 
+ARG DISTRO_VERSION_MAJOR
+ARG DISTRO_VERSION_MINOR
+ARG DISTRO_VERSION_PATCH
+
 # set root password
 RUN passwd -d root
 
@@ -9,6 +13,8 @@ RUN printf "" > /etc/fstab
 RUN sed -i "s/^#RESOLV_CONF=\"\/tmp/RESOLV_CONF=\"\/run/" \
       /etc/udhcpc/udhcpc.conf
 COPY files/issue.in /etc/issue
+RUN sed -i "s/x.y.z/$DISTRO_VERSION_MAJOR.$DISTRO_VERSION_MINOR.$DISTRO_VERSION_PATCH/" \
+    /etc/issue
 COPY files/setup_env.sh /etc/profile.d/
 
 # additional packages
