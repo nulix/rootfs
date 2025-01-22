@@ -8,5 +8,4 @@ INCLUDE+ Dockerfile.podman
 INCLUDE+ Dockerfile.openrc
 INCLUDE+ Dockerfile.ostree-initramfs
 INCLUDE+ Dockerfile.ostree
-INCLUDE+ Dockerfile.apps
 
