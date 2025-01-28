@@ -40,6 +40,10 @@ RUN mkdir ${OSTREE_ROOTFS} && \
 # 1.915 mv: can't remove '/etc/hosts': Device or resource busy
 RUN rm -rf ${OSTREE_ROOTFS}/etc
 
+# deploy custom apps
+RUN mkdir -p /usr/apps
+COPY apps/docker-compose.yml /usr/apps
+
 # reuse existing repo if possible
 COPY ${OSTREE_REPO}* /${OSTREE_REPO}
 
