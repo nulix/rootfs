@@ -34,6 +34,12 @@ start_apps() {
 
 start() {
 	cd /usr/apps
+
+	if [ ! -f docker-compose.yml ]; then
+		einfo "Compose file not found, apps not available!"
+		return 0
+	fi
+
 	COMPOSE_FILE_SHA=$(sha256sum docker-compose.yml | cut -d " " -f 1)
 
 	# update apps or just start them?
