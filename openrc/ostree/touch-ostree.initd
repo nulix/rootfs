@@ -11,7 +11,7 @@ depend() {
 }
 
 start() {
-    ebegin "Starting OSTree booted service"
-    touch /run/ostree-booted
-    eend $?
+	ebegin "Starting OSTree booted service"
+	touch /run/ostree-booted
+	eend $?
 }

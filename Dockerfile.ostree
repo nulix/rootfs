@@ -8,6 +8,7 @@ ARG VIRT_BACKEND
 ARG DISTRO_VERSION_MAJOR
 ARG OSTREE_BRANCHNAME="$DISTRO_VERSION_MAJOR/stable/$MACHINE"
 
+# install build deps
 RUN apk add --no-cache ostree patchelf
 
 # placeholder for ostree boot files
@@ -111,4 +112,3 @@ RUN ln -sf ../var/usrlocal usr/local
 
 # copy image manifest
 RUN cat ${IMAGE_MANIFEST} | cut -d " " -f1,3 > usr/package.manifest
-

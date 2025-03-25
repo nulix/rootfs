@@ -29,4 +29,3 @@ RUN apk add --no-cache \
 
 # OTA update test
 # RUN apk add --no-cache nano
-

@@ -1,0 +1,33 @@
+#!/sbin/openrc-run
+
+# Copyright (c) NULIX 2025
+# This code is licensed under BSD-2-Clause
+
+supervisor=supervise-daemon
+
+name="OTA update client"
+description="Service which starts upd8 daemon"
+
+command="${UPD8_BINARY:-/usr/bin/upd8}"
+command_args="${UPD8_OPTS}"
+
+UPD8_LOGFILE="${UPD8_LOGFILE:-/var/log/${RC_SVCNAME}.log}"
+UPD8_ERRFILE="${UPD8_ERRFILE:-${UPD8_LOGFILE}}"
+UPD8_OUTFILE="${UPD8_OUTFILE:-${UPD8_LOGFILE}}"
+if [ "$UPD8_ERRFILE" = "$UPD8_OUTFILE" ]; then
+	LOGPROXY_OPTS="$LOGPROXY_OPTS -m"
+fi
+export \
+	LOGPROXY_CHMOD="${LOGPROXY_CHMOD:-0644}" \
+	LOGPROXY_LOG_DIRECTORY="${LOGPROXY_LOG_DIRECTORY:-/var/log}" \
+	LOGPROXY_ROTATION_SIZE="${LOGPROXY_ROTATION_SIZE:-104857600}" \
+	LOGPROXY_ROTATION_TIME="${LOGPROXY_ROTATION_TIME:-86400}" \
+	LOGPROXY_ROTATION_SUFFIX="${LOGPROXY_ROTATION_SUFFIX:-.%Y%m%d%H%M%S}" \
+	LOGPROXY_ROTATED_FILES="${LOGPROXY_ROTATE_FILES:-5}"
+
+output_logger="log_proxy $LOGPROXY_OPTS $UPD8_OUTFILE"
+error_logger="log_proxy $LOGPROXY_OPTS $UPD8_ERRFILE"
+
+depend() {
+	need net
+}
