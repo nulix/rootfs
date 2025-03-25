@@ -36,6 +36,8 @@ RUN echo -n "$HOSTNAME" > /etc/machine
 COPY openrc/apps/apps.initd /etc/init.d/apps
 COPY openrc/tmpfiles/tmpfiles.initd /etc/init.d/tmpfiles
 COPY openrc/ostree/touch-ostree.initd /etc/init.d/touch-ostree
+COPY openrc/upd8/upd8.initd /etc/init.d/upd8
+COPY openrc/upd8/upd8.confd /etc/conf.d/upd8
 # COPY openrc/mountfs/mountfs.initd /etc/init.d/mountfs
 # RUN sed -i "s/@@NULIX_VIRT_BACKEND@@/${NULIX_VIRT_BACKEND}/g" /etc/init.d/mountfs
 #COPY openrc/rauc/rauc.initd /etc/init.d/rauc
@@ -67,6 +69,6 @@ RUN rc-update add sysctl boot
 #RUN rc-update add rauc-mark-good default
 RUN rc-update add agetty.$SERIAL_PORT default
 RUN rc-update add touch-ostree default
+RUN rc-update add upd8 default
 RUN rc-update add killprocs shutdown
 RUN rc-update add mount-ro shutdown
-

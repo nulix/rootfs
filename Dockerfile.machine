@@ -20,4 +20,3 @@ RUN K_VER=$(ls /usr/lib/modules) && \
     cp /boot/$KERNEL_IMAGE /usr/lib/modules/$K_VER/vmlinuz && \
     touch /usr/lib/modules/$K_VER/initramfs.img && \
     rm -rf boot
-

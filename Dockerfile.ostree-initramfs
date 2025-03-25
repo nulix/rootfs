@@ -1,3 +1,4 @@
+# install build deps
 RUN apk add --no-cache u-boot-tools
 
 # install init script
@@ -50,4 +51,3 @@ RUN apk del u-boot-tools
 # rm initramfs.img
 # gzip -d initramfs.img.gz
 # cpio -idmv < initramfs.img
-
