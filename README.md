@@ -1,4 +1,4 @@
-# rootfs
+# The rootfs part of the NULIX OS
 
 ## Build and export default rootfs image
 
@@ -37,4 +37,3 @@ docker build . -t nulix-rootfs:1.0.0 --build-arg NULIX_VIRT_BACKEND="podman"
 ```sh
 docker run -it --rm nulix-rootfs:1.0.0
 ```
-
