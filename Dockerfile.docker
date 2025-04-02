@@ -1,7 +1,4 @@
 ARG VIRT_BACKEND
-# TODO: make this better
-ARG CR_PAT="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"
-ARG CR_USER="mtudan"
 
 # TODO: use "pass" tool for credential storing?
 # https://github.com/docker/docker-credential-helpers
@@ -10,5 +7,4 @@ RUN if [[ "$VIRT_BACKEND" == "docker" ]]; then \
       mkdir /var/lib/docker; \
       apk add --no-cache docker-engine docker-cli docker-openrc; \
       apk add --no-cache docker-compose; \
-      echo $CR_PAT | docker login ghcr.io -u $CR_USER --password-stdin; \
     fi
