@@ -48,3 +48,8 @@ Thumbs.db
 ################
 ostree_manifest
 ostree_repo
+
+# upd8 #
+########
+key.txt
+*.age

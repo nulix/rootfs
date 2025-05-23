@@ -15,6 +15,8 @@
 FROM alpine AS build
 
 ARG MACHINE
+ARG UPD8_KEYS_FILE
+ARG UPD8_MACHINE_REG_TKN_FILE
 ARG DISTRO_VERSION_MAJOR
 ARG DISTRO_VERSION_MINOR
 ARG DISTRO_VERSION_PATCH
@@ -44,6 +46,11 @@ RUN rm -rf ${OSTREE_ROOTFS}/etc
 # deploy custom apps
 RUN mkdir -p ${OSTREE_ROOTFS}/usr/apps
 COPY apps*/docker-compose.yml ${OSTREE_ROOTFS}/usr/apps
+
+# deploy upd8 user files
+RUN mkdir -p ${OSTREE_ROOTFS}/var/upd8
+COPY ${UPD8_KEYS_FILE}* ${OSTREE_ROOTFS}/var/upd8
+COPY ${UPD8_MACHINE_REG_TKN_FILE}* ${OSTREE_ROOTFS}/var/upd8
 
 # reuse existing repo if possible
 COPY ${OSTREE_REPO}* /${OSTREE_REPO}
