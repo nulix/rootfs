@@ -41,4 +41,3 @@ COPY --from=build /rauc/build/data/de.pengutronix.rauc.conf /usr/share/dbus-1/sy
 # install rauc-hawkbit-updater
 COPY rauc/hawkbit-updater/config.conf.in /etc/rauc-hawkbit-updater/config.conf
 COPY --from=build /rauc-hawkbit-updater/build/rauc-hawkbit-updater /usr/bin
-

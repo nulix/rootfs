@@ -1,5 +1,4 @@
 ARG MACHINE
-ARG HOSTNAME
 ARG VIRT_BACKEND
 ARG SERIAL_PORT
 ARG SERIAL_BAUD
@@ -27,10 +26,6 @@ RUN mv /sbin/poweroff.in /sbin/poweroff && \
     mv /sbin/reboot.in /sbin/reboot && \
     chmod +x /sbin/poweroff && \
     chmod +x /sbin/reboot
-
-# workaround hostname issue
-RUN sed -i "s|/etc/hostname|/etc/machine|g" /etc/init.d/hostname
-RUN echo -n "$HOSTNAME" > /etc/machine
 
 # custom services
 COPY openrc/apps/apps.initd /etc/init.d/apps

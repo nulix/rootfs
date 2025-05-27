@@ -4,6 +4,7 @@
 # https://github.com/uptane/meta-updater/blob/master/classes/image_types_ostree.bbclass
 
 ARG MACHINE
+ARG HOSTNAME
 ARG VIRT_BACKEND
 ARG DISTRO_VERSION_MAJOR
 ARG OSTREE_BRANCHNAME="$DISTRO_VERSION_MAJOR/stable/$MACHINE"
@@ -78,6 +79,10 @@ RUN mkdir sysroot && \
 # > [2/2] RUN mv /etc /usr:
 # 1.915 mv: can't remove '/etc/resolv.conf': Device or resource busy
 # 1.915 mv: can't remove '/etc/hosts': Device or resource busy
+
+# workaround hostname issue
+RUN cd usr/etc && \
+    echo -n "$HOSTNAME" > hostname
 
 # make this symlink otherwise '/etc/resolv.conf' will be reported
 # as modified when running `ostree admin config-diff` because

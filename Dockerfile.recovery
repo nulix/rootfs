@@ -47,4 +47,3 @@ FROM scratch
 
 # copy build artifacts
 COPY --from=build /initramfs-recovery /
-
