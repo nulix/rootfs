@@ -6,4 +6,3 @@ RUN cd /etc && \
     grep root /usr/share/defaults/etc/group > /etc/group && \
     echo 'root:!:::::::' > /etc/shadow
 CMD ["/bin/bash"]
-

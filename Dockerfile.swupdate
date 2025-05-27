@@ -48,4 +48,3 @@ COPY --from=build /swupdate/libswupdate.so.0.1 /usr/lib
 RUN cd /usr/lib && ln -sf libswupdate.so.* libswupdate.so
 COPY swupdate/swupdate.cfg.in /etc/swupdate/swupdate.cfg
 COPY swupdate/swupdate-public.pem /etc/swupdate/
-

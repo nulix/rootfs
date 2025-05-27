@@ -31,4 +31,3 @@ RUN cd aktualizr && \
 
 # install uptane's aktualizr
 #COPY --from=build /rauc/build/rauc /usr/bin
-
