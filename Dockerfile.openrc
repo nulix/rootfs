@@ -47,6 +47,7 @@ COPY openrc/resize-rootfs/resize-rootfs.initd /etc/init.d/resize-rootfs
 RUN rc-update add dmesg sysinit
 RUN rc-update add hwdrivers sysinit
 RUN rc-update add mdev sysinit
+RUN rc-update add resize-rootfs sysinit
 RUN rc-update add tmpfiles sysinit
 RUN rc-update add apps boot
 RUN rc-update add chronyd boot
@@ -59,7 +60,6 @@ RUN if [[ "$MACHINE_HAS_RTC" == "true" ]]; then \
 RUN rc-update add modules boot
 # RUN rc-update add mountfs boot
 RUN rc-update add networking boot
-RUN rc-update add resize-rootfs boot
 #RUN rc-update add rauc boot
 RUN rc-update add sysctl boot
 #RUN rc-update add rauc-hawkbit-updater default
