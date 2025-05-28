@@ -23,6 +23,8 @@ RUN apk add --no-cache \
     chrony \
     dosfstools \
     e2fsprogs \
+    e2fsprogs-extra \
+    parted \
     htop \
     iproute2 \
     openssh

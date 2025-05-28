@@ -33,6 +33,7 @@ COPY openrc/tmpfiles/tmpfiles.initd /etc/init.d/tmpfiles
 COPY openrc/ostree/touch-ostree.initd /etc/init.d/touch-ostree
 COPY openrc/upd8/upd8.initd /etc/init.d/upd8
 COPY openrc/upd8/upd8.confd /etc/conf.d/upd8
+COPY openrc/resize-rootfs/resize-rootfs.initd /etc/init.d/resize-rootfs
 # COPY openrc/mountfs/mountfs.initd /etc/init.d/mountfs
 # RUN sed -i "s/@@NULIX_VIRT_BACKEND@@/${NULIX_VIRT_BACKEND}/g" /etc/init.d/mountfs
 #COPY openrc/rauc/rauc.initd /etc/init.d/rauc
@@ -58,6 +59,7 @@ RUN if [[ "$MACHINE_HAS_RTC" == "true" ]]; then \
 RUN rc-update add modules boot
 # RUN rc-update add mountfs boot
 RUN rc-update add networking boot
+RUN rc-update add resize-rootfs boot
 #RUN rc-update add rauc boot
 RUN rc-update add sysctl boot
 #RUN rc-update add rauc-hawkbit-updater default
