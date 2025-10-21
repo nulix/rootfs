@@ -16,6 +16,7 @@ COPY files/issue.in /etc/issue
 RUN sed -i "s/x.y.z/$DISTRO_VERSION_MAJOR.$DISTRO_VERSION_MINOR.$DISTRO_VERSION_PATCH/" \
     /etc/issue
 COPY files/setup_env.sh /etc/profile.d/
+COPY files/panic.conf /etc/sysctl.d/99-panic.conf
 
 # additional packages
 RUN apk add --no-cache \

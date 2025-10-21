@@ -60,7 +60,10 @@ stop() {
 	ebegin "Stopping apps"
 
 	cd /usr/apps
-	docker compose stop
+
+	if [ -f docker-compose.yml ]; then
+		docker compose stop
+	fi
 
 	eend $?
 }

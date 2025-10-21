@@ -12,7 +12,7 @@ depend() {
 
 start() {
 	if [ -f /var/cache/resize-rootfs ]; then
-		einfo "The rootfs partition is already resized!"
+		einfo "The rootfs partition is already resized"
 		return 0
 	fi
 
@@ -21,9 +21,11 @@ start() {
 	ROOT_PART=$(mount | grep ' on / ' | awk '{print $1}')
 	DISK_DEV=$(echo "$ROOT_PART" | sed -E 's/p?[0-9]+$//')
 
-	parted --script "$DISK_DEV" resizepart ${ROOT_PART##*p} 100%
-	e2fsck -f "$ROOT_PART" || true
+	echo -e "resizepart\n${ROOT_PART##*p}\nYes\n100%\nquit" | parted "$DISK_DEV" ---pretend-input-tty
+
+	e2fsck -f "$ROOT_PART"
 	resize2fs "$ROOT_PART"
+
 	touch /var/cache/resize-rootfs
 
 	eend $?
