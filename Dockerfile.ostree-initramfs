@@ -42,7 +42,6 @@ RUN cd initramfs && \
 # cleanups
 RUN mv initramfs/initramfs.img /usr/lib/modules/*/ && \
     rm -rf initramfs
-RUN apk del u-boot-tools
 
 ###
 ### extract initramfs (for debugging only):
