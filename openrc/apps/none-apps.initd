@@ -1,0 +1,33 @@
+#!/sbin/openrc-run
+
+# Copyright (c) NULIX 2025
+# This code is licensed under BSD-2-Clause
+
+supervisor=supervise-daemon
+
+name="Custom apps"
+description="Service which starts custom apps"
+
+command="${APP_BINARY:-/usr/bin/app}"
+command_args="${APP_OPTS}"
+
+APP_LOGFILE="${APP_LOGFILE:-/var/log/${RC_SVCNAME}.log}"
+APP_ERRFILE="${APP_ERRFILE:-${APP_LOGFILE}}"
+APP_OUTFILE="${APP_OUTFILE:-${APP_LOGFILE}}"
+if [ "$APP_ERRFILE" = "$APP_OUTFILE" ]; then
+	LOGPROXY_OPTS="$LOGPROXY_OPTS -m"
+fi
+export \
+	LOGPROXY_CHMOD="${LOGPROXY_CHMOD:-0644}" \
+	LOGPROXY_LOG_DIRECTORY="${LOGPROXY_LOG_DIRECTORY:-/var/log}" \
+	LOGPROXY_ROTATION_SIZE="${LOGPROXY_ROTATION_SIZE:-104857600}" \
+	LOGPROXY_ROTATION_TIME="${LOGPROXY_ROTATION_TIME:-86400}" \
+	LOGPROXY_ROTATION_SUFFIX="${LOGPROXY_ROTATION_SUFFIX:-.%Y%m%d%H%M%S}" \
+	LOGPROXY_ROTATED_FILES="${LOGPROXY_ROTATE_FILES:-5}"
+
+output_logger="log_proxy $LOGPROXY_OPTS $APP_OUTFILE"
+error_logger="log_proxy $LOGPROXY_OPTS $APP_ERRFILE"
+
+depend() {
+	need net
+}
