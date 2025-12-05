@@ -1,5 +1,7 @@
+ARG ARCH
+
 # install build deps
-RUN apk add --no-cache u-boot-tools
+RUN apk add --no-cache ostree u-boot-tools
 
 # install init script
 COPY ostree-initramfs/init.sh initramfs/init
@@ -11,7 +13,7 @@ RUN apk fetch --no-cache busybox && \
     rm busybox-*.apk && \
     cd initramfs/bin && \
     for i in $(busybox --list); do \
-        ln -sf /bin/busybox $i; \
+      ln -sf /bin/busybox $i; \
     done
 RUN cd initramfs && \
     mkdir lib && \
@@ -36,7 +38,7 @@ RUN cd initramfs && \
 
 # make uboot image
 RUN cd initramfs && \
-    mkimage -A arm64 -O linux -T ramdisk -C gzip \
+    mkimage -A $ARCH -O linux -T ramdisk -C gzip \
             -n "OSTree initramfs" -d initramfs.img.gz initramfs.img
 
 # cleanups
