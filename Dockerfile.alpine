@@ -1,11 +1,16 @@
-FROM alpine:3.21.3
+ARG ALPINE_VERSION=3.20
+FROM alpine:${ALPINE_VERSION}
 
+ARG SERIAL_PORT
 ARG DISTRO_VERSION_MAJOR
 ARG DISTRO_VERSION_MINOR
 ARG DISTRO_VERSION_PATCH
 
 # set root password
 RUN passwd -d root
+
+# and login console
+RUN grep -q "$SERIAL_PORT" /etc/securetty || echo "$SERIAL_PORT" >> /etc/securetty
 
 # cleanups
 RUN printf "" > /etc/motd
