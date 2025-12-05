@@ -6,6 +6,8 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
+alias ip="ip -c"
+
 COL_YEL="\[\e[1;33m\]"
 COL_GRA="\[\e[0;37m\]"
 COL_WHI="\[\e[1;37m\]"
@@ -27,7 +29,7 @@ case $TERM in
   linux | *term* | rxvt | screen | vt100 )
     PS1="${COLORIZED_PROMPT}"
     unset COLORIZED_PROMPT ;;
-  * ) 
+  * )
     PS1="\u@\h:\w${_p} " ;;
 esac
 
