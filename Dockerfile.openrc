@@ -28,7 +28,8 @@ RUN mv /sbin/poweroff.in /sbin/poweroff && \
     chmod +x /sbin/reboot
 
 # custom services
-COPY openrc/apps/apps.initd /etc/init.d/apps
+COPY openrc/apps/$VIRT_BACKEND-apps.initd /etc/init.d/apps
+COPY openrc/apps/app.sh /usr/bin/app
 COPY openrc/tmpfiles/tmpfiles.initd /etc/init.d/tmpfiles
 COPY openrc/ostree/touch-ostree.initd /etc/init.d/touch-ostree
 COPY openrc/upd8/upd8.initd /etc/init.d/upd8
@@ -52,7 +53,7 @@ RUN rc-update add tmpfiles sysinit
 RUN rc-update add apps boot
 RUN rc-update add chronyd boot
 #RUN rc-update add dbus boot
-RUN rc-update add $VIRT_BACKEND boot
+RUN rc-update add $VIRT_BACKEND boot || true
 RUN rc-update add hostname boot
 RUN if [[ "$MACHINE_HAS_RTC" == "true" ]]; then \
       rc-update add hwclock boot; \
