@@ -10,6 +10,8 @@ ARG SERIAL_PORT
 ARG SERIAL_BAUD
 ARG UPD8_KEYS_FILE
 ARG UPD8_MACHINE_REG_TKN_FILE
+ARG SSL_CERT
+ARG SSH_PUBLIC_KEY
 ARG DISTRO_VERSION_MAJOR
 ARG DISTRO_VERSION_MINOR
 ARG DISTRO_VERSION_PATCH
@@ -18,9 +20,9 @@ INCLUDE ./Dockerfile.alpine
 INCLUDE ./Dockerfile.apps
 INCLUDE ./Dockerfile.upd8
 INCLUDE ./Dockerfile.machine
-INCLUDE ./Dockerfile.lxc
-INCLUDE ./Dockerfile.docker
-INCLUDE ./Dockerfile.podman
+INCLUDE ./Dockerfile.virt-backend
+INCLUDE ./Dockerfile.ca-certificates
+INCLUDE ./Dockerfile.openssh
 INCLUDE ./Dockerfile.openrc
 INCLUDE ./Dockerfile.ostree-initramfs
 INCLUDE ./Dockerfile.ostree

@@ -1,5 +1,0 @@
-ARG VIRT_BACKEND
-
-RUN if [[ "$VIRT_BACKEND" == "lxc" ]]; then \
-      apk add --no-cache lxc lxc-openrc; \
-    fi

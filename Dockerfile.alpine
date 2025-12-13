@@ -19,7 +19,7 @@ RUN sed -i "s/^#RESOLV_CONF=\"\/tmp/RESOLV_CONF=\"\/run/" \
       /etc/udhcpc/udhcpc.conf
 COPY files/issue.in /etc/issue
 RUN sed -i "s/x.y.z/$DISTRO_VERSION_MAJOR.$DISTRO_VERSION_MINOR.$DISTRO_VERSION_PATCH/" \
-    /etc/issue
+      /etc/issue
 COPY files/setup_env.sh /etc/profile.d/
 COPY files/panic.conf /etc/sysctl.d/99-panic.conf
 
@@ -32,8 +32,7 @@ RUN apk add --no-cache \
     e2fsprogs-extra \
     parted \
     htop \
-    iproute2 \
-    openssh
+    iproute2
 
 # OTA update test
 # RUN apk add --no-cache nano

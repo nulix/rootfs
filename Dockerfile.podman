@@ -1,5 +1,0 @@
-ARG VIRT_BACKEND
-
-RUN if [[ "$VIRT_BACKEND" == "podman" ]]; then \
-      apk add --no-cache podman podman-openrc; \
-    fi
