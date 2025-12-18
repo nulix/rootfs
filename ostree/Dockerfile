@@ -9,6 +9,10 @@ ARG VIRT_BACKEND
 ARG DISTRO_VERSION_MAJOR
 ARG OSTREE_BRANCHNAME="$DISTRO_VERSION_MAJOR/stable/$MACHINE"
 
+# install and start the service
+COPY ostree/files/touch-ostree.initd /etc/init.d/touch-ostree
+RUN rc-update add touch-ostree default
+
 # install build deps
 RUN apk add --no-cache ostree patchelf
 
@@ -34,22 +38,22 @@ RUN rm -rf /lib && \
     /tmp/busybox ln -s usr/lib /lib && \
     apk del patchelf
 RUN if [ -d /lib64 ]; then \
-      mkdir -p /usr/lib64; \
-      cp -a /lib64/* /usr/lib64; \
-      rm -rf /lib64; \
-      ln -s usr/lib64 /lib64; \
+    mkdir -p /usr/lib64; \
+    cp -a /lib64/* /usr/lib64; \
+    rm -rf /lib64; \
+    ln -s usr/lib64 /lib64; \
     fi
 SHELL ["/bin/busybox", "sh", "-c"]
 RUN rm /tmp/busybox
 
 # preserve var/lib/$VIRT_BACKEND
 RUN if [ -d var/lib/$VIRT_BACKEND ]; then \
-      mv var/lib/$VIRT_BACKEND var-lib-$VIRT_BACKEND; \
+    mv var/lib/$VIRT_BACKEND var-lib-$VIRT_BACKEND; \
     fi
 
 # preserve var/local
 RUN if [ -d var/local ]; then \
-      mv var/local var-local; \
+    mv var/local var-local; \
     fi
 
 # completely remove var
@@ -60,13 +64,13 @@ RUN rm -rf var/lib && \
 
 # get back var/local
 RUN if [ -d var-local ]; then \
-      mv var-local var/local; \
+    mv var-local var/local; \
     fi
 
 # get back var/lib/$VIRT_BACKEND
 RUN if [ -d var-lib-$VIRT_BACKEND ]; then \
-      mkdir var/lib; \
-      mv var-lib-$VIRT_BACKEND var/lib/$VIRT_BACKEND; \
+    mkdir var/lib; \
+    mv var-lib-$VIRT_BACKEND var/lib/$VIRT_BACKEND; \
     fi
 
 # create sysroot directory to which physical sysroot will be mounted
@@ -103,8 +107,8 @@ RUN mkdir -p var/rootdirs && \
 
 RUN DIRS="media mnt opt srv" && \
     for dir in ${DIRS}; do \
-      rm -rf /${dir}; \
-      ln -sf var/rootdirs/${dir} ${dir}; \
+    rm -rf /${dir}; \
+    ln -sf var/rootdirs/${dir} ${dir}; \
     done
 
 RUN mv root var/roothome && \

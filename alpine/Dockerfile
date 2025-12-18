@@ -16,12 +16,12 @@ RUN grep -q "$SERIAL_PORT" /etc/securetty || echo "$SERIAL_PORT" >> /etc/securet
 RUN printf "" > /etc/motd
 RUN printf "" > /etc/fstab
 RUN sed -i "s/^#RESOLV_CONF=\"\/tmp/RESOLV_CONF=\"\/run/" \
-      /etc/udhcpc/udhcpc.conf
-COPY files/issue.in /etc/issue
+    /etc/udhcpc/udhcpc.conf
+COPY alpine/files/issue.in /etc/issue
 RUN sed -i "s/x.y.z/$DISTRO_VERSION_MAJOR.$DISTRO_VERSION_MINOR.$DISTRO_VERSION_PATCH/" \
-      /etc/issue
-COPY files/setup_env.sh /etc/profile.d/
-COPY files/panic.conf /etc/sysctl.d/99-panic.conf
+    /etc/issue
+COPY alpine/files/setup_env.sh /etc/profile.d/
+COPY alpine/files/panic.conf /etc/sysctl.d/99-panic.conf
 
 # additional packages
 RUN apk add --no-cache \

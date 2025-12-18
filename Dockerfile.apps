@@ -1,2 +1,0 @@
-RUN mkdir -p /usr/apps
-COPY apps*/docker-compose.yml /usr/apps

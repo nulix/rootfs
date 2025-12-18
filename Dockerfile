@@ -16,13 +16,13 @@ ARG DISTRO_VERSION_MAJOR
 ARG DISTRO_VERSION_MINOR
 ARG DISTRO_VERSION_PATCH
 
-INCLUDE ./Dockerfile.alpine
-INCLUDE ./Dockerfile.apps
-INCLUDE ./Dockerfile.upd8
-INCLUDE ./Dockerfile.machine
-INCLUDE ./Dockerfile.virt-backend
-INCLUDE ./Dockerfile.ca-certificates
-INCLUDE ./Dockerfile.openssh
-INCLUDE ./Dockerfile.openrc
-INCLUDE ./Dockerfile.ostree-initramfs
-INCLUDE ./Dockerfile.ostree
+INCLUDE alpine/Dockerfile
+INCLUDE openrc/Dockerfile
+INCLUDE apps/Dockerfile
+INCLUDE upd8/Dockerfile
+INCLUDE machine/Dockerfile
+INCLUDE virt-backend/Dockerfile
+INCLUDE ca-certificates/Dockerfile
+INCLUDE openssh/Dockerfile
+INCLUDE ostree-initramfs/Dockerfile
+INCLUDE ostree/Dockerfile
