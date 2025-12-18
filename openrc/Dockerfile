@@ -28,21 +28,8 @@ RUN mv /sbin/poweroff.in /sbin/poweroff && \
     chmod +x /sbin/reboot
 
 # custom services
-COPY openrc/apps/$VIRT_BACKEND-apps.initd /etc/init.d/apps
-COPY openrc/apps/app.sh /usr/bin/app
 COPY openrc/tmpfiles/tmpfiles.initd /etc/init.d/tmpfiles
-COPY openrc/ostree/touch-ostree.initd /etc/init.d/touch-ostree
-COPY openrc/upd8/upd8.initd /etc/init.d/upd8
-COPY openrc/upd8/upd8.confd /etc/conf.d/upd8
 COPY openrc/resize-rootfs/resize-rootfs.initd /etc/init.d/resize-rootfs
-# COPY openrc/mountfs/mountfs.initd /etc/init.d/mountfs
-# RUN sed -i "s/@@NULIX_VIRT_BACKEND@@/${NULIX_VIRT_BACKEND}/g" /etc/init.d/mountfs
-#COPY openrc/rauc/rauc.initd /etc/init.d/rauc
-#COPY openrc/rauc/rauc.confd /etc/conf.d/rauc
-#COPY openrc/rauc/rauc-mark-good.initd /etc/init.d/rauc-mark-good
-#COPY openrc/rauc/rauc-mark-good.confd /etc/conf.d/rauc-mark-good
-#COPY openrc/rauc/rauc-hawkbit-updater.initd /etc/init.d/rauc-hawkbit-updater
-#COPY openrc/rauc/rauc-hawkbit-updater.confd /etc/conf.d/rauc-hawkbit-updater
 
 # add services to runlevels, in this order: sysinit, boot, default, shutdown
 RUN rc-update add dmesg sysinit
@@ -50,23 +37,15 @@ RUN rc-update add hwdrivers sysinit
 RUN rc-update add mdev sysinit
 RUN rc-update add resize-rootfs sysinit
 RUN rc-update add tmpfiles sysinit
-RUN rc-update add apps boot
 RUN rc-update add chronyd boot
-#RUN rc-update add dbus boot
 RUN rc-update add $VIRT_BACKEND boot || true
 RUN rc-update add hostname boot
 RUN if [[ "$MACHINE_HAS_RTC" == "true" ]]; then \
       rc-update add hwclock boot; \
     fi
 RUN rc-update add modules boot
-# RUN rc-update add mountfs boot
 RUN rc-update add networking boot
-#RUN rc-update add rauc boot
 RUN rc-update add sysctl boot
-#RUN rc-update add rauc-hawkbit-updater default
-#RUN rc-update add rauc-mark-good default
 RUN rc-update add agetty.$SERIAL_PORT default
-RUN rc-update add touch-ostree default
-RUN rc-update add upd8 default
 RUN rc-update add killprocs shutdown
 RUN rc-update add mount-ro shutdown

@@ -8,7 +8,7 @@ ARG MACHINE="rpi"
 FROM ./Dockerfile.rauc AS build
 INCLUDE ./Dockerfile.machine
 
-COPY recovery/recover.sh.in /recover.sh
+COPY recover.sh.in /recover.sh
 RUN chmod +x /recover.sh
 
 # TODO: why this doesn't work??
