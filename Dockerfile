@@ -17,7 +17,6 @@ ARG DISTRO_VERSION_MINOR
 ARG DISTRO_VERSION_PATCH
 
 INCLUDE alpine/Dockerfile
-INCLUDE openrc/Dockerfile
 INCLUDE apps/Dockerfile
 INCLUDE upd8/Dockerfile
 INCLUDE machine/Dockerfile

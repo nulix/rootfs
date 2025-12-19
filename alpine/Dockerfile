@@ -34,5 +34,5 @@ RUN apk add --no-cache \
     htop \
     iproute2
 
-# OTA update test
-# RUN apk add --no-cache nano
+# install and configure openrc
+INCLUDE ../openrc/Dockerfile
