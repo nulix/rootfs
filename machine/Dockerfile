@@ -1,17 +1,27 @@
 ARG MACHINE
-ARG NULIX_VIRT_BACKEND
+ARG BOOT_DEV_PART
+ARG UBOOT_ENV_SIZE
+ARG NETWORK_INTERFACE
+ARG NETWORK_DHCP
 ARG KERNEL_IMAGE
 
-COPY machine/$MACHINE/fstab.in /etc/fstab
-COPY machine/$MACHINE/fw_env.config.in /etc/fw_env.config
-COPY machine/$MACHINE/interfaces.in /etc/network/interfaces
+COPY machine/files/fstab.in /etc/fstab
+COPY machine/files/fw_env.config.in /etc/fw_env.config
+COPY machine/files/interfaces.in /etc/network/interfaces
 ADD machine/$MACHINE/kernel-modules-*.tar.gz /usr/lib/modules
 ADD machine/$MACHINE/kernel-artifacts-*.tar.gz /boot
 
-RUN sed -i "s/@@VIRT_BACKEND@@/${VIRT_BACKEND}/g" /etc/fstab
+RUN sed -i "s/@@BOOT_DEV@@/${BOOT_DEV_PART}/" /etc/fstab
+RUN sed -i "s/@@ENV_SIZE@@/${UBOOT_ENV_SIZE}/" /etc/fw_env.config
+RUN if [[ -n "$NETWORK_INTERFACE" ]]; then \
+      echo "auto $NETWORK_INTERFACE" >> /etc/network/interfaces && \
+      if [[ "$NETWORK_DHCP" == "true" ]]; then \
+        echo "iface $NETWORK_INTERFACE inet dhcp" >> /etc/network/interfaces; \
+      fi \
+    fi
 
 # install rpi firmware
-RUN if [[ "$MACHINE" == "rpi3" ]]; then \
+RUN if [[ "$MACHINE" == "raspberry-pi-3" ]]; then \
       apk add --no-cache linux-firmware-brcm; \
     fi
 

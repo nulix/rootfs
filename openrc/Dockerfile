@@ -1,5 +1,5 @@
 ARG MACHINE
-ARG VIRT_BACKEND
+ARG VIRT_TECH
 ARG SERIAL_PORT
 ARG SERIAL_BAUD
 
@@ -38,10 +38,10 @@ RUN rc-update add mdev sysinit
 RUN rc-update add resize-rootfs sysinit
 RUN rc-update add tmpfiles sysinit
 RUN rc-update add chronyd boot
-RUN rc-update add $VIRT_BACKEND boot || true
+RUN rc-update add $VIRT_TECH boot || true
 RUN rc-update add hostname boot
 RUN if [[ "$MACHINE_HAS_RTC" == "true" ]]; then \
-      rc-update add hwclock boot; \
+    rc-update add hwclock boot; \
     fi
 RUN rc-update add modules boot
 RUN rc-update add networking boot

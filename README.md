@@ -24,12 +24,12 @@ docker build -f Dockerfile.ota-update . -o .
 docker build . -t nulix-rootfs:1.0.0
 ```
 
-## Docker image build - set virtualization backend
+## Docker image build - set virtualization tech
 
 ```sh
-docker build . -t nulix-rootfs:1.0.0 --build-arg NULIX_VIRT_BACKEND="lxc"
-docker build . -t nulix-rootfs:1.0.0 --build-arg NULIX_VIRT_BACKEND="docker"
-docker build . -t nulix-rootfs:1.0.0 --build-arg NULIX_VIRT_BACKEND="podman"
+docker build . -t nulix-rootfs:1.0.0 --build-arg VIRT_TECH="lxc"
+docker build . -t nulix-rootfs:1.0.0 --build-arg VIRT_TECH="docker"
+docker build . -t nulix-rootfs:1.0.0 --build-arg VIRT_TECH="podman"
 ```
 
 ## Test rootfs docker image
