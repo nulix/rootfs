@@ -5,7 +5,7 @@
 
 ARG MACHINE
 ARG HOSTNAME
-ARG VIRT_BACKEND
+ARG VIRT_TECH
 ARG DISTRO_VERSION_MAJOR
 ARG OSTREE_BRANCHNAME="$DISTRO_VERSION_MAJOR/stable/$MACHINE"
 
@@ -46,9 +46,9 @@ RUN if [ -d /lib64 ]; then \
 SHELL ["/bin/busybox", "sh", "-c"]
 RUN rm /tmp/busybox
 
-# preserve var/lib/$VIRT_BACKEND
-RUN if [ -d var/lib/$VIRT_BACKEND ]; then \
-    mv var/lib/$VIRT_BACKEND var-lib-$VIRT_BACKEND; \
+# preserve var/lib/$VIRT_TECH
+RUN if [ -d var/lib/$VIRT_TECH ]; then \
+    mv var/lib/$VIRT_TECH var-lib-$VIRT_TECH; \
     fi
 
 # preserve var/local
@@ -67,10 +67,10 @@ RUN if [ -d var-local ]; then \
     mv var-local var/local; \
     fi
 
-# get back var/lib/$VIRT_BACKEND
-RUN if [ -d var-lib-$VIRT_BACKEND ]; then \
+# get back var/lib/$VIRT_TECH
+RUN if [ -d var-lib-$VIRT_TECH ]; then \
     mkdir var/lib; \
-    mv var-lib-$VIRT_BACKEND var/lib/$VIRT_BACKEND; \
+    mv var-lib-$VIRT_TECH var/lib/$VIRT_TECH; \
     fi
 
 # create sysroot directory to which physical sysroot will be mounted

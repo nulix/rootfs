@@ -6,7 +6,7 @@
 description="Mount partitions"
 
 depend() {
-	before rauc @@NULIX_VIRT_BACKEND@@
+	before rauc @@VIRT_TECH@@
 	keyword -prefix -lxc -docker
 }
 
@@ -31,13 +31,13 @@ start() {
 
 	# bind mounts
 	ebegin "Mounting bind mounts"
-	mkdir -p /data/@@NULIX_VIRT_BACKEND@@
-	mount --bind /data/@@NULIX_VIRT_BACKEND@@ /var/lib/@@NULIX_VIRT_BACKEND@@
+	mkdir -p /data/@@VIRT_TECH@@
+	mount --bind /data/@@VIRT_TECH@@ /var/lib/@@VIRT_TECH@@
 	eend $?
 }
 
 stop() {
 	mountpoint -q "/boot" && umount /boot
-	mountpoint -q "/var/lib/@@NULIX_VIRT_BACKEND@@" && umount /var/lib/@@NULIX_VIRT_BACKEND@@
+	mountpoint -q "/var/lib/@@VIRT_TECH@@" && umount /var/lib/@@VIRT_TECH@@
 	mountpoint -q "/data" && umount /data
 }
